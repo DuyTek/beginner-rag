@@ -16,7 +16,7 @@ browser = Browser(
 
 initial_actions= [
       {
-        'open_tab': {'url': 'http://localhost:6006'}
+        'open_tab': {'url': 'https://google.com'}
       }
 ]
 
