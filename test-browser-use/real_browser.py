@@ -1,27 +1,21 @@
 import asyncio
-from browser_use import Browser, BrowserConfig, Controller, Agent
+from browser_use import Browser, BrowserConfig, BrowserContextConfig, Controller, Agent, ActionResult
+from browser_use.browser.context import BrowserContext
 from llm import llm
 from data.instructions import example_test_steps
 from pydantic import BaseModel
-from typing import List
+from typing import List, Optional
 import json
+from action_util import ActionHistoryBeautifier
 
 
 class Post(BaseModel):
-    video_title: str
-    video_url: str
-    video_creator: str
-    views: int
-    xpath: str
-    id: str
+    xpath: Optional[str] = None
+    tag_name: Optional[str] = None
+    index: int
 
 
-class Posts(BaseModel):
-    posts: List[Post]
-
-
-controller = Controller(output_model=Posts)
-
+controller = Controller(output_model=Post)
 
 browser = Browser(
     config=BrowserConfig(
@@ -30,7 +24,6 @@ browser = Browser(
         disable_security=True,
     )
 )
-
 
 initial_actions = [
     {
@@ -60,31 +53,47 @@ agent = Agent(
 async def main():
     history = await agent.run()
 
-    result = history.final_result()
+    # Get the model actions
     model_actions = history.model_actions()
-    posts_data = []
-    if result:
-        parsed: Posts = Posts.model_validate_json(result)
 
-        posts_data.append(parsed.dict())
-        for post in parsed.posts:
-            print('\n--------------------------------')
-            print(f'Title:            {post.video_title}')
-            print(f'URL:              {post.video_url}')
-            print(f'Views:         {post.views}')
-            print(f'Creator: {post.video_creator}')
-            print(f'Xpath: {post.xpath}')
-            print(f'Id: {post.id}')
-            print('--------------------------------\n')
-            print(f'[actions]: {format(model_actions)}')
+    # Format the history in different ways
+    json_output = ActionHistoryBeautifier.beautify(
+        model_actions, format='json')
+    markdown_output = ActionHistoryBeautifier.beautify(
+        model_actions, format='markdown')
+    html_output = ActionHistoryBeautifier.beautify(
+        model_actions, format='html')
 
-        with open('results.json', 'w') as json_file:
-            json.dump(posts_data, json_file, indent=4)
-    else:
-        print('No result')
+    # Save the outputs to files
+    with open('action_history.json', 'w', encoding='utf-8') as f:
+        f.write(json_output)
+
+    with open('action_history.md', 'w', encoding='utf-8') as f:
+        f.write(markdown_output)
+
+    with open('action_history.html', 'w', encoding='utf-8') as f:
+        f.write(html_output)
+
+    # Print a summary to console
+    print("\n=== Action History Summary ===")
+    for i, action in enumerate(model_actions):
+        action_type = next((k for k in action.keys() if k !=
+                           'interacted_element'), 'unknown')
+        element = action.get('interacted_element')
+        tag_name = getattr(element, 'tag_name', 'None') if element else 'None'
+        print(f"{i+1}. {action_type} - Element: {tag_name}")
+
+    # Process the final result
+    result = history.final_result()
+
+    print("\nAction history files generated:")
+    print("- action_history.json")
+    print("- action_history.md")
+    print("- action_history.html")
 
     await browser.close()
     input("Press Enter to close the browser")
+
 
 if __name__ == '__main__':
     asyncio.run(main())
