@@ -7,6 +7,7 @@ from pydantic import BaseModel
 from typing import List, Optional
 import json
 from action_util import ActionHistoryBeautifier
+from service.api import hello_world
 
 
 class Post(BaseModel):
@@ -51,47 +52,50 @@ agent = Agent(
 
 
 async def main():
-    history = await agent.run()
+    # history = await agent.run()
 
-    # Get the model actions
-    model_actions = history.model_actions()
+    # # Get the model actions
+    # model_actions = history.model_actions()
 
-    # Format the history in different ways
-    json_output = ActionHistoryBeautifier.beautify(
-        model_actions, format='json')
-    markdown_output = ActionHistoryBeautifier.beautify(
-        model_actions, format='markdown')
-    html_output = ActionHistoryBeautifier.beautify(
-        model_actions, format='html')
+    # # Format the history in different ways
+    # json_output = ActionHistoryBeautifier.beautify(
+    #     model_actions, format='json')
+    # markdown_output = ActionHistoryBeautifier.beautify(
+    #     model_actions, format='markdown')
+    # html_output = ActionHistoryBeautifier.beautify(
+    #     model_actions, format='html')
 
-    # Save the outputs to files
-    with open('action_history.json', 'w', encoding='utf-8') as f:
-        f.write(json_output)
+    # # Save the outputs to files
+    # with open('action_history.json', 'w', encoding='utf-8') as f:
+    #     f.write(json_output)
 
-    with open('action_history.md', 'w', encoding='utf-8') as f:
-        f.write(markdown_output)
+    # with open('action_history.md', 'w', encoding='utf-8') as f:
+    #     f.write(markdown_output)
 
-    with open('action_history.html', 'w', encoding='utf-8') as f:
-        f.write(html_output)
+    # with open('action_history.html', 'w', encoding='utf-8') as f:
+    #     f.write(html_output)
 
-    # Print a summary to console
-    print("\n=== Action History Summary ===")
-    for i, action in enumerate(model_actions):
-        action_type = next((k for k in action.keys() if k !=
-                           'interacted_element'), 'unknown')
-        element = action.get('interacted_element')
-        tag_name = getattr(element, 'tag_name', 'None') if element else 'None'
-        print(f"{i+1}. {action_type} - Element: {tag_name}")
+    # # Print a summary to console
+    # print("\n=== Action History Summary ===")
+    # for i, action in enumerate(model_actions):
+    #     action_type = next((k for k in action.keys() if k !=
+    #                        'interacted_element'), 'unknown')
+    #     element = action.get('interacted_element')
+    #     tag_name = getattr(element, 'tag_name', 'None') if element else 'None'
+    #     print(f"{i+1}. {action_type} - Element: {tag_name}")
 
-    # Process the final result
-    result = history.final_result()
+    # # Process the final result
+    # result = history.final_result()
 
-    print("\nAction history files generated:")
-    print("- action_history.json")
-    print("- action_history.md")
-    print("- action_history.html")
+    # print("\nAction history files generated:")
+    # print("- action_history.json")
+    # print("- action_history.md")
+    # print("- action_history.html")
 
-    await browser.close()
+    print("First api called")
+    hello_world()
+
+    # await browser.close()
     input("Press Enter to close the browser")
 
 

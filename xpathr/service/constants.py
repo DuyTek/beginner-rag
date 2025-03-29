@@ -1,0 +1,2 @@
+# First endpoint
+hello = '/hello'
