@@ -1,13 +1,15 @@
-import './App.css'
-import { AppProviders } from './config/AppProvider'
-import { Outlet } from 'react-router'
+import { AppLayout } from "./components";
+import { AppProviders } from "./config/AppProvider";
+import { Outlet } from "react-router";
 
 function App() {
   return (
     <AppProviders>
-      <Outlet />
+      <AppLayout>
+        <Outlet />
+      </AppLayout>
     </AppProviders>
-  )
+  );
 }
 
-export default App
+export default App;
