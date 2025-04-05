@@ -1,5 +1,4 @@
 import { Header } from "./Header";
-import { Footer } from "./Footer";
 import { Box } from "@mui/material";
 
 export function AppLayout({ children }: { children: React.ReactNode }) {
@@ -12,10 +11,18 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
       }}
     >
       <Header />
-      <Box component="main" sx={{ flexGrow: 1, py: 2, px: 2 }}>
+      <Box
+        component="main"
+        sx={{
+          flexGrow: 1,
+          py: 2,
+          pt: 8,
+          px: 15,
+        }}
+      >
         {children}
       </Box>
-      <Footer />
+      {/* <Footer /> */}
     </Box>
   );
 }
