@@ -7,8 +7,13 @@ import {
   TextField,
 } from "@mui/material";
 import { SubInputLabel } from "../../components";
+import { getTestScenario } from "../../api";
 
 export const CreateScenarioForm = () => {
+  const handleSubmit = async (event: React.FormEvent) => {
+    event.preventDefault();
+    await getTestScenario();
+  };
   return (
     <form>
       <Grid container spacing={4} columns={12}>
@@ -31,7 +36,7 @@ export const CreateScenarioForm = () => {
         </Grid>
       </Grid>
       <Grid flexDirection="row-reverse" container mt={2}>
-        <Button type="submit" variant="contained">
+        <Button onClick={handleSubmit} type="submit" variant="contained">
           Submit
         </Button>
       </Grid>

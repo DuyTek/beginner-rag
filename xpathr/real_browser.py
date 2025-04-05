@@ -10,6 +10,7 @@ from action_util import ActionHistoryBeautifier
 from service.error_handler import register_error_handlers
 from service.routes import register_routes
 from flask import Flask, jsonify
+from flask_cors import CORS
 
 
 class Post(BaseModel):
@@ -55,15 +56,15 @@ agent = Agent(
 
 def create_app():
     app = Flask(__name__)
+    CORS(app)
     register_routes(app)
     register_error_handlers(app)
-    app.run(host='0.0.0.0', port=9092)
-    print("Flask app is running")
     return app
 
 
 async def main():
     app = create_app()
+    app.run(debug=True, host='localhost', port=9092)
     # history = await agent.run()
 
     # # Get the model actions
