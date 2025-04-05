@@ -7,7 +7,9 @@ from pydantic import BaseModel
 from typing import List, Optional
 import json
 from action_util import ActionHistoryBeautifier
-from service.api import hello_world
+from service.error_handler import register_error_handlers
+from service.routes import register_routes
+from flask import Flask, jsonify
 
 
 class Post(BaseModel):
@@ -51,7 +53,17 @@ agent = Agent(
 )
 
 
+def create_app():
+    app = Flask(__name__)
+    register_routes(app)
+    register_error_handlers(app)
+    app.run(host='0.0.0.0', port=9092)
+    print("Flask app is running")
+    return app
+
+
 async def main():
+    app = create_app()
     # history = await agent.run()
 
     # # Get the model actions
@@ -91,9 +103,6 @@ async def main():
     # print("- action_history.json")
     # print("- action_history.md")
     # print("- action_history.html")
-
-    print("First api called")
-    hello_world()
 
     # await browser.close()
     input("Press Enter to close the browser")
