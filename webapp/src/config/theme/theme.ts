@@ -1,5 +1,8 @@
 import { createTheme, Theme } from "@mui/material";
 import { buttonTheme } from "./ButtonTheme";
+import { textFieldTheme } from "./TextFieldTheme";
+import { outlinedInputTheme } from "./OutlinedInputTheme";
+import { formLabelTheme } from "./FormLabelTheme";
 
 export const themeConfig: Theme = createTheme({
   palette: {
@@ -78,16 +81,12 @@ export const themeConfig: Theme = createTheme({
   shape: {
     borderRadius: 4,
   },
-  spacing: 4, // Base spacing unit in px
+  spacing: 4,
   components: {
     MuiButton: buttonTheme(),
-    MuiPaper: {
-      styleOverrides: {
-        root: {
-          padding: "16px",
-        },
-      },
-    },
+    MuiFormLabel: formLabelTheme(),
+    MuiOutlinedInput: outlinedInputTheme(),
+    MuiTextField: textFieldTheme(),
   },
 });
 

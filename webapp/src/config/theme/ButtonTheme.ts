@@ -1,8 +1,8 @@
-import { Theme } from "@emotion/react";
 import {
   ComponentsProps,
   ComponentsOverrides,
   ComponentsVariants,
+  Theme,
 } from "@mui/material";
 
 export const buttonTheme = (): {
@@ -10,15 +10,19 @@ export const buttonTheme = (): {
   styleOverrides?: ComponentsOverrides<Theme>["MuiButton"];
   variants?: ComponentsVariants["MuiButton"];
 } => ({
+  defaultProps: {
+    disableRipple: true,
+    disableElevation: true,
+  },
   styleOverrides: {
-    root: {
-      padding: "8px 16px",
-    },
-    sizeSmall: {
-      padding: "4px 8px",
-    },
-    sizeLarge: {
-      padding: "12px 24px",
-    },
+    root: ({ theme }) => ({
+      padding: theme.spacing(2, 4),
+    }),
+    sizeSmall: ({ theme }) => ({
+      padding: theme.spacing(1, 2),
+    }),
+    sizeLarge: ({ theme }) => ({
+      padding: theme.spacing(3, 6),
+    }),
   },
 });
