@@ -3,6 +3,8 @@ import { buttonTheme } from "./ButtonTheme";
 import { textFieldTheme } from "./TextFieldTheme";
 import { outlinedInputTheme } from "./OutlinedInputTheme";
 import { formLabelTheme } from "./FormLabelTheme";
+import { buttonBaseTheme } from "./ButtonBaseTheme";
+import { checkboxTheme } from "./CheckboxTheme";
 
 export const themeConfig: Theme = createTheme({
   palette: {
@@ -83,7 +85,9 @@ export const themeConfig: Theme = createTheme({
   },
   spacing: 4,
   components: {
+    MuiCheckbox: checkboxTheme(),
     MuiButton: buttonTheme(),
+    MuiButtonBase: buttonBaseTheme(),
     MuiFormLabel: formLabelTheme(),
     MuiOutlinedInput: outlinedInputTheme(),
     MuiTextField: textFieldTheme(),
