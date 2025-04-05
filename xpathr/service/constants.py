@@ -1,2 +1,0 @@
-# First endpoint
-hello = '/hello'
